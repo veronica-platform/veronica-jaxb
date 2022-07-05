@@ -24,6 +24,13 @@ pipeline {
                 }
             }
         }
+        stage("Release") {
+            steps {
+                script {
+                    flow.release()
+                }
+            }
+        }
     }
     post {
         always {
