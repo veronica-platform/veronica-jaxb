@@ -19,9 +19,9 @@ pipeline {
         }
         stage('Build') {
             steps {
-                configFileProvider([configFile(fileId: 'rp_maven_settings', variable: 'MAVEN_SETTINGS')]) {
+                configFileProvider([configFile(fileId: 'jfrog-settings-xml', variable: 'MAVEN_SETTINGS')]) {
                     rtMavenRun (
-                        tool: 'MAVEN_3.8.3',
+                        tool: 'MAVEN_3.8.6',
                         pom: 'pom.xml',
                         goals: '-s $MAVEN_SETTINGS clean install',
                         deployerId: 'deployer',
