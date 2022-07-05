@@ -1,49 +1,25 @@
 pipeline {
     agent {  label 'contabo-vps' }
+    options {
+        skipDefaultCheckout()
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        timeout(time: 10, unit: "MINUTES")
+    }
+    tools {
+        maven "MAVEN_3.8.6"
+    }
     stages {
-        stage('Setup') {
+        stage('Preparation') {
             steps {
-                rtMavenDeployer(
-                    id: 'deployer',
-                    serverId: 'rp-artifactory-server',
-                    releaseRepo: 'libs-release-local',
-                    snapshotRepo: 'libs-snapshot-local'
-                )
-                rtMavenResolver(
-                    id: 'resolver',
-                    serverId: 'rp-artifactory-server',
-                    releaseRepo: 'libs-release',
-                    snapshotRepo: 'libs-snapshot'
-                )
-            }
-        }
-        stage('Build') {
-            steps {
-                configFileProvider([configFile(fileId: 'jfrog-settings-xml', variable: 'MAVEN_SETTINGS')]) {
-                    rtMavenRun (
-                        tool: 'MAVEN_3.8.6',
-                        pom: 'pom.xml',
-                        goals: '-s $MAVEN_SETTINGS clean install',
-                        deployerId: 'deployer',
-                        resolverId: 'resolver'
-                    )
+                script {
+                    flow.init()
+                    flow.withStage("Build", {
+                        flow.build()
+                    })
                 }
             }
         }
-        stage('Release') {
-            steps {
-                rtPublishBuildInfo (
-                    serverId: 'rp-artifactory-server'
-                )
-                rtAddInteractivePromotion (
-                    serverId: 'rp-artifactory-server',
-                    buildName: JOB_NAME,
-                    buildNumber: BUILD_NUMBER
-                )
-            }
-        }
     }
-
     post {
         always {
             cleanWs()
