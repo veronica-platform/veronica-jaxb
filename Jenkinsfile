@@ -8,6 +8,9 @@ pipeline {
     tools {
         maven "MAVEN_3.8.6"
     }
+    parameters {
+        string(name:'TAG_NAME', defaultValue:'main', description:'')
+    }
     stages {
         stage('Preparation') {
             steps {
