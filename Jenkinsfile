@@ -1,3 +1,5 @@
+@Library("veronica-jenkins-shared-library") _
+
 pipeline {
     agent {  label 'contabo-vps' }
     options {
