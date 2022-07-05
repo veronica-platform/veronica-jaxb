@@ -1,5 +1,5 @@
 pipeline {
-    agent {  label 'docker' }
+    agent {  label 'contabo-vps' }
     stages {
         stage('Setup') {
             steps {
