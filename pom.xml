@@ -6,7 +6,7 @@
 
     <groupId>ec.veronica</groupId>
     <artifactId>veronica-jaxb</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.0.1</version>
 
     <name>veronica-jaxb</name>
 
